@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+    db: 
+        image: mysql:8
+        container_name: istamo2020
+        environment:
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+            MYSQL_DATABASE: tamo
+            MYSQL_ROOT_PASSWORD: admin
+        ports:
+            - '5432:5432'
+        volumes:
+            - ./mysql:/docker-entrypoint-initdb.d
