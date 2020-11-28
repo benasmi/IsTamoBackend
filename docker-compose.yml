@@ -4,12 +4,14 @@ services:
     db: 
         image: mysql:8
         container_name: istamo2020
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
         environment:
             MYSQL_USER: admin
             MYSQL_PASSWORD: admin
             MYSQL_DATABASE: tamo
             MYSQL_ROOT_PASSWORD: admin
         ports:
-            - '5432:5432'
+            - '3306:3306'
         volumes:
             - ./mysql:/docker-entrypoint-initdb.d

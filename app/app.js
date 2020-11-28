@@ -1,14 +1,30 @@
-const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+// create express app
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+// Setup server port
+const port = 4000;
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// parse requests of content-type - application/json
+app.use(bodyParser.json())
+
+// define a root route
+app.get('/', (req, res) => {
+  res.send("Hello World");
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+// Require employee routes
+const userRoutes = require('./repository/userRepository')
+
+// using as middleware
+app.use('/api/v1/users', userRoutes)
+
+// listen for requests
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
