@@ -1,11 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
+require('dotenv').config({path: path.join(__dirname, './config/.env')});
 
 // create express app
 const app = express();
-
-// Setup server port
-const port = 4000;
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -25,6 +24,6 @@ const userRoutes = require('./repository/userRepository')
 app.use('/api/v1/users', userRoutes)
 
 // listen for requests
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is listening on port ${process.env.PORT}`);
 });

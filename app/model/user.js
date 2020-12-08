@@ -1,5 +1,5 @@
 'user strict';
-var dbConn = require('../config/db_connection');
+var dbConn = require('../db');
 
 //User object create
 var User = function(user){
