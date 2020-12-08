@@ -1,8 +1,8 @@
-var mysql = require('mysql');
+var mysql = require('mysql2');
 const path = require('path');
 require('dotenv').config({path: path.join(__dirname, '../config/.env')});
 
-var con = mysql.createConnection({
+const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -11,9 +11,4 @@ var con = mysql.createConnection({
     insecureAuth: true
 });
 
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
-
-module.exports = con;
+module.exports = pool.promise()
