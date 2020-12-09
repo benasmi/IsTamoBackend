@@ -19,7 +19,7 @@ const authRoutes = require('./routes/authRoutes')
 
 app.use(genericRoutes)
 app.use('/api/users', userRoutes)
-app.use('/api/auth/', authRoutes)
+app.use('/api/auth', authRoutes)
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`);
