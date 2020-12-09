@@ -31,7 +31,7 @@ CREATE TABLE USERS(
 	refresh_token varchar(255),
 	insertion_date datetime DEFAULT CURRENT_TIMESTAMP,
 	alter_date datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	version varchar(20) NOT NULL,
+	version varchar(20),
 	address varchar(255) NOT NULL,
 	id_code varchar(255) NOT NULL,
 	CONSTRAINT FK_role_users FOREIGN KEY (fk_roleId) REFERENCES ROLE(id),
