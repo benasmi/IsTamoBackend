@@ -18,12 +18,14 @@ const userRoutes = require('./routes/userRoutes')
 const newsRoutes = require('./routes/newsRoutes')
 const markRoutes = require('./routes/markRoutes')
 const authRoutes = require('./routes/authRoutes')
+const systemRoutes = require('./routes/systemRoutes')
 
 app.use(genericRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/news', newsRoutes)
 app.use('/api/marks', markRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/system', systemRoutes)
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`);
