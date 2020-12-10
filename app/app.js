@@ -16,11 +16,13 @@ app.use(bodyParser.json())
 const genericRoutes = require('./routes')
 const userRoutes = require('./routes/userRoutes')
 const newsRoutes = require('./routes/newsRoutes')
+const markRoutes = require('./routes/markRoutes')
 const authRoutes = require('./routes/authRoutes')
 
 app.use(genericRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/news', newsRoutes)
+app.use('/api/marks', markRoutes)
 app.use('/api/auth', authRoutes)
 
 app.listen(process.env.PORT, () => {

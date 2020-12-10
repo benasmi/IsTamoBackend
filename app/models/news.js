@@ -1,4 +1,4 @@
-'user strict';
+'news strict';
 const dbConn = require('../db');
 
 //News object create
