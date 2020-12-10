@@ -25,10 +25,6 @@ Mark.findOne = async (data) => {
 }
 
 Mark.create = async (data) => {
-    console.log(data)
-    if (!data || !data.subjectId || !data.userId || data.description === undefined || !data.mark)
-        throw new Error("Missing parameters")
-
     const [result,fields] = await dbConn.query("INSERT INTO MARK " + 
     "(mark, fk_subjectId, fk_userId, mark_type, description) VALUES " + 
     "(?,?,?,?,?)", [data.mark, data.subjectId, data.userId, data.mark_type,
@@ -38,10 +34,6 @@ Mark.create = async (data) => {
 }
 
 Mark.update = async (data) => {
-    console.log(data)
-    if (!data || !data.id)
-        throw new Error("Missing parameters")
-
     const [result,fields] = await dbConn.query("UPDATE MARK " + 
     "SET mark=COALESCE(?,mark), fk_subjectId=COALESCE(?, fk_subjectId), " + 
     "mark_type=COALESCE(?,mark_type), description=COALESCE(?,description), " +

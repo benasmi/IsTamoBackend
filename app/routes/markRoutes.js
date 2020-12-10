@@ -16,6 +16,10 @@ router.get('/', auth, async (req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
+    if (!req.body || !req.body.subjectId || !req.body.userId || 
+        req.body.description === undefined || !req.body.mark)
+            return res.status(400).send({error: true, message: "Bad request"})
+
     try {
         const mark = await Mark.create(req.body)
         return res.status(200).send(mark)
@@ -23,6 +27,8 @@ router.post('/', auth, async (req, res) => {
 })
 
 router.patch('/', auth, async (req, res) => {
+    if (!req.body || !req.body.id)
+        return res.status(400).send({error: true, message: 'Bad request'})
     try {
         const found = await Mark.findOne(req.body)
         if (!found) return res.status(404).send({error: true, message: 'Mark not found'})

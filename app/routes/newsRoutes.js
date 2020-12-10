@@ -11,6 +11,8 @@ router.get('/', auth, async (req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
+    if (!req.body || !req.body.userId || !req.body.title || !req.body.content)
+        return res.status(500).send({error: true, message: "Bad request"})
     try {
         const news = await News.create(req.body)
         res.status(200).send(news)
