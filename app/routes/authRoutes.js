@@ -3,7 +3,6 @@ const router = new express.Router()
 const path = require('path');
 require('dotenv').config({path: path.join(__dirname, './config/.env')});
 const auth = require('../middleware/auth.js')
-const dbConn = require('../db')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const User = require('../models/user')
