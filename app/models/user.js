@@ -8,24 +8,13 @@ var User = function(user){
    
 };
 
-User.find = async (fields, values) => {
-    let users
-    if (fields.constructor === Array && values.constructor === Array) {
-        if (fields.length != values.length) throw new Error("Argument lengths mismatch")
-
-        let query = "select * from USERS where ?? = ?"
-        let args = [fields[0], values[0]]
-
-        for (let i = 1; i < fields.length; i++) {
-            query += " and ?? = ?" 
-            args.push(fields[i], values[i])
-        }
-
-        [users, flds] = await dbConn.query(query, args);
-
-    } else if (typeof fields === 'string' && !(values instanceof Array)) {
-        [users, flds] = await dbConn.query("select * from USERS where ?? = ?", [fields, values]);
-    } else throw new Error("Bad parameters")
+User.find = async (data) => {
+    const [users,fields] = await dbConn.query("SELECT * FROM USERS WHERE " + 
+    "fk_roleId=COALESCE(?,fk_roleId) and IFNULL(fk_userId,'0')=COALESCE(?,fk_userId,'0') and " + 
+    "name=COALESCE(?,name) and surname=COALESCE(?,surname) and birthday=COALESCE(?,birthday) and " + 
+    "email=COALESCE(?,email) and address LIKE CONCAT(CONCAT('%', COALESCE(?, address)), '%') and " + 
+    "password=COALESCE(?,password) and id=COALESCE(?,id)", 
+    [data.roleId, data.userId, data.name, data.surname, data.birthday, data.email, data.address, data.password, data.id])
 
     users.forEach(user => {
         delete user.password
@@ -35,13 +24,13 @@ User.find = async (fields, values) => {
     return users
 }
 
-User.findOne = async (fields, values) => {
-    const users = await User.find(fields, values)
+User.findOne = async (data) => {
+    const users = await User.find(data)
     return users[0]
 }
 
-User.getRelatedUsers = async (userid) => {
-    const [users,fields] = await dbConn.query('select * from USERS where fk_userId=?', [userid])
+User.getRelatedUsers = async (data) => {
+    const [users,fields] = await dbConn.query('select * from USERS where fk_userId=?', [data.userId])
 
     users.forEach(user => {
         delete user.password
@@ -51,19 +40,19 @@ User.getRelatedUsers = async (userid) => {
     return users
 }
 
-User.updateRefreshToken = async (userid, token) => {
-    return await dbConn.query('update USERS set refresh_token=? where id=?', [token, userid]);
+User.updateRefreshToken = async (data) => {
+    return await dbConn.query('update USERS set refresh_token=? where id=?', [data.token, data.userId]);
 }
 
-User.getAllMarks = async (userid) => {
-    const [enrollments,fields] = await dbConn.query('select * from SUBJECT_USER where fk_userId=?', [userid])
+User.getAllMarks = async (data) => {
+    const [enrollments,fields] = await dbConn.query('select * from SUBJECT_USER where fk_userId=?', [data.userid])
 
     let result = []
     for (let i = 0; i < enrollments.length; i++) {
         const [subject,fields] = await dbConn.query('select * from SUBJECT where ' + 
             'id = ?', [enrollments[i].fk_subjectId])
         const [marks,fields2] = await dbConn.query('select * from MARK where ' + 
-            'fk_subjectId=? and fk_userId=?', [subject[0].id, userid])
+            'fk_subjectId=? and fk_userId=?', [subject[0].id, data.userid])
 
         subject[0].marks = marks
         result.push(subject[0])

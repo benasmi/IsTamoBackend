@@ -12,9 +12,9 @@ router.post('/login', async (req, res) => {
     const password = crypto.createHash('sha256').update(req.body.password).digest('hex');
 
     try {
-        var user = await User.findOne(["email", "password"], [email, password])
+        var user = await User.findOne({email, password})
         if (!user)
-            return res.status(404).send()
+            return res.status(404).send({error: true, message: "User not found"})
 
         let payload = {
             id: user.id,
@@ -31,12 +31,12 @@ router.post('/login', async (req, res) => {
             expiresIn: process.env.REFRESH_TOKEN_LIFE
         })
 
-        User.updateRefreshToken(user.id, refreshToken)
+        User.updateRefreshToken({userId: user.id, token: refreshToken})
 
         res.cookie("jwt", accessToken, {secure: false, httpOnly: true})
         res.status(200).send()
     } catch (e) {
-        return res.status(500).send()
+        return res.status(500).send({error: true, message: e.message})
     }
 })
 
@@ -50,19 +50,19 @@ router.post('/refresh', async (req, res) => {
     let payload
     try{
         payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
-    } catch(e) {return res.status(401).send()}
+    } catch(e) {return res.status(401).send({error: true, message: e.message})}
 
     let user
     try {
         user = await User.findOne(["id"], [payload.id])
-    } catch (e) {return res.status(404).send(e)}
+    } catch (e) {return res.status(404).send({error: true, message: e.message})}
 
     const refreshToken = user.refresh_token
 
     try{
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
     } catch(e){
-        return res.status(401).send(e)
+        return res.status(401).send({error: true, message: e.message})
     }
     const newToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, 
     {
@@ -78,7 +78,7 @@ router.post('/logout', auth, async (req, res) => {
         User.updateRefreshToken(req.payload.id, null)
         res.cookie("jwt", null, {secure: false, httpOnly: true})
         res.status(200).send()
-    } catch (e) {return res.status(500).send(e)}
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })
 
 module.exports = router
