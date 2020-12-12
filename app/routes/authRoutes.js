@@ -33,8 +33,8 @@ router.post('/login', async (req, res) => {
 
         User.updateRefreshToken({userId: user.id, token: refreshToken})
 
-        res.cookie("jwt", accessToken, {secure: false, httpOnly: true})
-        res.status(200).send()
+        // res.cookie("jwt", accessToken, {secure: false, httpOnly: true})
+        res.status(200).send(accessToken)
     } catch (e) {
         return res.status(500).send({error: true, message: e.message})
     }

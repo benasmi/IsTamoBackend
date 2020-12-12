@@ -70,7 +70,7 @@ router.post('/upvote', auth, async (req, res) => {
         const upvote = await News.upvote({
             userId: req.payload.id,
             newsId: req.body.id
-        })
+        });
 
         res.status(200).send(upvote)
     } catch (e) {return res.status(500).send({error: true, message: e})}
