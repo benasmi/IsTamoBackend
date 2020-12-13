@@ -1,12 +1,25 @@
 const express = require('express')
 const router = new express.Router()
 const SubjectUser = require('../models/subject_user')
-const Subject = require('../models/subject_user')
+const Subject = require('../models/subject')
+const Mark = require('../models/mark')
 const auth = require('../middleware/auth.js')
+
+router.get('/', auth, async (req,res) => {
+    try {
+        const result = await Subject.getSubjects({})
+        return res.status(200).send(result)
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
+})
 
 router.get('/users', auth, async (req, res) => {
     try {
-        const result = await SubjectUser.getSubjects(req.body)
+        req.query.userId = req.query.userId || req.payload.id
+        const result = await SubjectUser.getSubjects(req.query)
+        for (let i = 0; i < result.length; i++) {
+            const marks = await Mark.find({subjectId: result[i].id, userId: req.query.userId | req.payload.id})
+            result[i].marks = marks
+        }
         return res.status(200).send(result)
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })

@@ -10,6 +10,11 @@ Subject.getSubject = async (data) => {
     return subject[0]
 }
 
+Subject.getSubjects = async (data) => {
+    const [subjects,f] = await dbConn.query("SELECT * FROM SUBJECT", [data.subjectId])
+    return subjects
+}
+
 Subject.createSubject = async (data) => {
     const [result,fields] = await dbConn.query("INSERT INTO SUBJECT " +
     "(name, description, hours) VALUES " +

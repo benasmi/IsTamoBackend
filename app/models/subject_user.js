@@ -7,7 +7,7 @@ var SubjectUser = function(subjectUser) {}
 SubjectUser.getSubjects = async (data) => {
     const [result,fields] = await dbConn.query("SELECT SUBJECT.* FROM SUBJECT_USER " +
     "LEFT JOIN SUBJECT ON SUBJECT.id=fk_subjectId " + 
-    "WHERE fk_userId=?", [data.userId])
+    "WHERE fk_userId=COALESCE(?,fk_userId)", [data.userId])
     return result
 }
 
