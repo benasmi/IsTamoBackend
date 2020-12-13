@@ -31,6 +31,6 @@ app.use('/api/system', systemRoutes)
 app.use('/api/schedule', scheduleRoutes)
 app.use('/api/subject', subjectRoutes)
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
   console.log(`Server is listening on port ${process.env.PORT}`);
 });
