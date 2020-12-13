@@ -85,7 +85,7 @@ router.get('/subjects/:id', auth, async (req, res) => {
 
 router.get('/get', auth, async (req, res) => {
     try {
-        const schedules = await SubjectSchedule.getSubjectSchedules({})
+        const schedules = await SubjectSchedule.getSubjectSchedules(req.query)
 
         return res.status(200).send(schedules)
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
