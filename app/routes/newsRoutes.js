@@ -76,7 +76,7 @@ router.post('/upvote', auth, async (req, res) => {
         const found = await News.findOne(req.body)
         if (!found) return res.status(404).send({error: true, message: 'News item not found'})
 
-        const upvoted = await News.getUpvotes({id: req.body.id, userId: req.payload.id})
+        const upvoted = await News.getUpvotes({newsId: req.body.newsId, userId: req.payload.id})
         if (upvoted[0]) {
             await News.downvote({newsId: req.body.id, userId: req.payload.id})
             return res.status(200).send()
