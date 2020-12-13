@@ -57,6 +57,13 @@ router.patch('/', auth, async (req, res) => {
 
         await User.update(req.body)
 
+        if (req.body.subjects) {
+            await SubjectUser.removeAllSubjectUser({userId: req.body.id})
+            req.body.subjects.forEach(async element => {
+                await SubjectUser.createSubjectUser({subjectId: element, userId: req.body.id})
+            })
+        }
+
         return res.status(200).send(user)
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })

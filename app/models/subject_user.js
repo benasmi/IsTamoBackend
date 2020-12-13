@@ -40,4 +40,11 @@ SubjectUser.removeSubjectUser = async (data) => {
     return removed
 }
 
+SubjectUser.removeAllSubjectUser = async (data) => {
+    const removed = SubjectUser.findSubjectUser({userId: data.id})
+    await dbConn.query("DELETE FROM SUBJECT_USER " +
+    "WHERE fk_userId=?", [data.userId])
+    return removed
+}
+
 module.exports = SubjectUser
