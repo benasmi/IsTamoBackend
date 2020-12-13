@@ -10,6 +10,11 @@ Schedule.getScheduleInfo = async (data) => {
     return info[0]
 }
 
+Schedule.getSchedules = async (data) => {
+    const [info,f] = await dbConn.query("SELECT * FROM SCHEDULE")
+    return info
+}
+
 Schedule.createSchedule = async (data) => {
     const [result,fields] = await dbConn.query("INSERT INTO SCHEDULE " +
     "(name, description) VALUES " +

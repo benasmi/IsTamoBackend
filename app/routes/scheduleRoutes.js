@@ -30,8 +30,8 @@ router.get('/', auth, async (req, res) => {
 
 router.get('/global', auth, async (req, res) => {
     try {
-        const subjects = await Subject.getSubjects({})
-        return res.status(200).send(subjects)
+        const schedule = await Schedule.getSchedules({})
+        return res.status(200).send(schedule)
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })
 
