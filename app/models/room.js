@@ -10,4 +10,9 @@ Room.getRoom = async (data) => {
     return room[0]
 }
 
+Room.getRooms = async (data) => {
+    const [rooms,f] = await dbConn.query("SELECT * FROM ROOM")
+    return rooms
+}
+
 module.exports = Room
