@@ -12,8 +12,14 @@ SubjectSchedule.getSchedule = async (data) => {
 
 SubjectSchedule.getSubjectSchedule = async (data) => {
     const [result,fields] = await dbConn.query("SELECT * FROM SUBJECT_SCHEDULE " +
-    "WHERE id=?", [data.id])
+    "WHERE id=COALESCE(?, id)", [data.id])
     return result[0]
+}
+
+SubjectSchedule.getSubjectSchedules = async (data) => {
+    const [result,fields] = await dbConn.query("SELECT * FROM SUBJECT_SCHEDULE " +
+    "WHERE id=COALESCE(?, id)", [data.id])
+    return result
 }
 
 SubjectSchedule.createSubjectSchedule = async (data) => {
