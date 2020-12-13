@@ -3,6 +3,7 @@ const router = new express.Router()
 const News = require('../models/news')
 const auth = require('../middleware/auth.js')
 
+// - DONE
 router.get('/', auth, async (req, res) => {
     try {
         const news = await News.find(req.query)
@@ -10,18 +11,22 @@ router.get('/', auth, async (req, res) => {
     } catch (e) {return res.status(500).send({error: true, message: e})}
 })
 
+// - DONE
 router.post('/', auth, async (req, res) => {
-    if (!req.body || !req.body.userId || !req.body.title || !req.body.content)
+    console.log(req.body);
+    if (!req.body || !req.body.title || !req.body.content)
         return res.status(500).send({error: true, message: "Bad request"})
     try {
-        const news = await News.create(req.body)
+        req.body.userId = req.payload.id;
+        const news = await News.create(req.body);
         res.status(200).send(news)
     } catch (e) {return res.status(500).send({error: true, message: e})}
 })
 
+
 router.patch('/', auth, async (req, res) => {
     try {
-        const found = await News.findOne(req.body)
+        const found = await News.findOne(req.body.id)
         if (!found) return res.status(404).send({error: true, message: 'News item not found'})
 
         const news = await News.update(req.body)
