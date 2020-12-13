@@ -7,12 +7,13 @@ var News = function(news) {
 }
 
 News.find = async (data) => {
-    const [news, fields] = await dbConn.query("SELECT * FROM NEWS WHERE " + 
+    const [news, fields] = await dbConn.query("SELECT NEWS.* FROM NEWS " +
+    "WHERE " + 
     "id=COALESCE(?,id) and fk_userId=COALESCE(?,fk_userId) and title LIKE CONCAT(CONCAT('%', COALESCE(?, title)), '%') and " + 
     "content LIKE CONCAT(CONCAT('%', COALESCE(?, content)), '%') and " + 
     "insertion_date BETWEEN COALESCE(?,insertion_date) AND COALESCE(?,insertion_date) and " + 
     "alter_date BETWEEN COALESCE(?,alter_date) AND COALESCE(?,alter_date)", 
-    [data.id, data.userId, data.title, data.content, data.insertion_date_from, 
+    [data.userId, data.id, data.userId, data.title, data.content, data.insertion_date_from, 
         data.insertion_date_to, data.alter_date_from, data.alter_date_to])
     return news
 }
@@ -52,6 +53,13 @@ News.getUpvotes = async (data) => {
 
 News.countUpvotes = async (data) => {
     const [result,fields] = await dbConn.query("SELECT COUNT(id) as count FROM UP_VOTES " + 
+    "WHERE fk_newsId=COALESCE(?,fk_newsId) and fk_userId=COALESCE(?,fk_userId)", 
+    [data.id, data.userId])
+    return result[0].count
+}
+
+News.countUpvotes = async (data) => {
+    const [result,fields] = await dbConn.query("SELECT COUNT(id) as count FROM UP_VOTES " + 
     "WHERE fk_newsId=COALESCE(?,fk_newsId)", [data.id])
     return result[0]
 }
@@ -62,6 +70,16 @@ News.upvote = async (data) => {
 
     const [result,fields] = await dbConn.query("INSERT IGNORE INTO UP_VOTES (fk_userId, fk_newsId)" + 
     "VALUES (?, ?)", [data.userId, data.newsId])
+
+    return await News.getUpvotes({ id: data.newsId, userId: data.userId })
+}
+
+News.downvote = async (data) => {
+    if (!data || !data.userId || !data.newsId) 
+        throw new Error("Missing parameters")
+
+    const [result,fields] = await dbConn.query("DELETE FROM UP_VOTES " + 
+    "WHERE fk_userId=? and fk_newsId=?", [data.userId, data.newsId])
 
     return await News.getUpvotes({ id: data.newsId, userId: data.userId })
 }
