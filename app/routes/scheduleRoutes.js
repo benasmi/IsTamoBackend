@@ -62,4 +62,28 @@ router.get('/subjects/:id', auth, async (req, res) => {
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })
 
+router.post('/', auth, async (req, res) => {
+    try {
+        const schedule = await SubjectSchedule.createSubjectSchedule(req.body)
+
+        return res.status(200).send(schedule)
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
+})
+
+router.patch('/', auth, async (req, res) => {
+    try {
+        const schedule = await SubjectSchedule.updateSubjectSchedule(req.body)
+
+        return res.status(200).send(schedule)
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
+})
+
+router.delete('/', auth, async (req,res) => {
+    try {
+        const schedule = await SubjectSchedule.removeSubjectSchedule(req.body)
+
+        return res.status(200).send(schedule)
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
+})
+
 module.exports = router

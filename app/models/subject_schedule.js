@@ -17,7 +17,7 @@ SubjectSchedule.getSubjectSchedule = async (data) => {
 }
 
 SubjectSchedule.createSubjectSchedule = async (data) => {
-    const [result,fields] = await dbConn.query("INSERT INTO SUBJECT_SCHEDULE " +
+    const [result,fields] = await dbConn.query("INSERT INTO SUBJECT_SCHEDULE " + 
     "(week_day, subject_time, fk_subjectId, fk_roomId, fk_scheduleId) VALUES " +
     "(?,?,?,?,?)", [data.weekDay, data.subjectTime, data.subjectId, data.roomId, data.scheduleId])
     return await SubjectSchedule.getSubjectSchedule({id: result.insertId})
