@@ -9,11 +9,11 @@ var News = function(news) {
 News.find = async (data) => {
     const [news, fields] = await dbConn.query("SELECT NEWS.* FROM NEWS " +
     "WHERE " + 
-    "id=COALESCE(?,id) and fk_userId=COALESCE(?,fk_userId) and title LIKE CONCAT(CONCAT('%', COALESCE(?, title)), '%') and " + 
+    "id=COALESCE(?,id) and title LIKE CONCAT(CONCAT('%', COALESCE(?, title)), '%') and " + 
     "content LIKE CONCAT(CONCAT('%', COALESCE(?, content)), '%') and " + 
     "insertion_date BETWEEN COALESCE(?,insertion_date) AND COALESCE(?,insertion_date) and " + 
     "alter_date BETWEEN COALESCE(?,alter_date) AND COALESCE(?,alter_date)", 
-    [data.userId, data.id, data.userId, data.title, data.content, data.insertion_date_from, 
+    [data.id, data.title, data.content, data.insertion_date_from, 
         data.insertion_date_to, data.alter_date_from, data.alter_date_to])
     return news
 }
