@@ -47,21 +47,15 @@ News.delete = async (data) => {
 News.getUpvotes = async (data) => {
     const [result,fields] = await dbConn.query("SELECT * FROM UP_VOTES " + 
     "WHERE fk_newsId=COALESCE(?,fk_newsId) and fk_userId=COALESCE(?,fk_userId)", 
-    [data.id, data.userId])
+    [data.newsId, data.userId])
     return result
 }
 
 News.countUpvotes = async (data) => {
     const [result,fields] = await dbConn.query("SELECT COUNT(id) as count FROM UP_VOTES " + 
     "WHERE fk_newsId=COALESCE(?,fk_newsId) and fk_userId=COALESCE(?,fk_userId)", 
-    [data.id, data.userId])
+    [data.newsId, data.userId])
     return result[0].count
-}
-
-News.countUpvotes = async (data) => {
-    const [result,fields] = await dbConn.query("SELECT COUNT(id) as count FROM UP_VOTES " + 
-    "WHERE fk_newsId=COALESCE(?,fk_newsId)", [data.id])
-    return result[0]
 }
 
 News.upvote = async (data) => {

@@ -9,10 +9,10 @@ router.get('/', auth, async (req, res) => {
         req.query.userId = req.payload.id
         const news = await News.find(req.query)
         for (let i = 0; i < news.length; i++) {
-            const upvotesCount = await News.countUpvotes({userId: req.payload.id, newsId: news[i].id})
+            const upvotesCount = await News.countUpvotes({newsId: news[i].id})
             const upvoted = await News.getUpvotes({userId: req.payload.id, newsId: news[i].id})
-            upvoted ? news[i].upvoted = true : news[i].upvoted = false 
-            news[i].upvotesCount = upvotesCount.count
+            upvoted.length > 0 ? news[i].upvoted = true : news[i].upvoted = false 
+            news[i].upvotesCount = upvotesCount
         }
         res.status(200).send(news)
     } catch (e) {return res.status(500).send({error: true, message: e})}
