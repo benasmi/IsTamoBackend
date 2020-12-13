@@ -78,13 +78,13 @@ router.post('/upvote', auth, async (req, res) => {
 
         const upvoted = await News.getUpvotes({newsId: req.body.newsId, userId: req.payload.id})
         if (upvoted[0]) {
-            await News.downvote({newsId: req.body.id, userId: req.payload.id})
+            await News.downvote({newsId: req.body.newsId, userId: req.payload.id})
             return res.status(200).send()
         }
 
         const upvote = await News.upvote({
             userId: req.payload.id,
-            newsId: req.body.id
+            newsId: req.body.newsId
         });
 
         res.status(200).send(upvote)
