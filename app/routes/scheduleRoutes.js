@@ -28,6 +28,13 @@ router.get('/', auth, async (req, res) => {
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })
 
+router.get('/global', auth, async (req, res) => {
+    try {
+        const subjects = await Subject.getSubjects({})
+        return res.status(200).send(subjects)
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
+})
+
 router.get('/user/:id', auth, async (req, res) => {
     try {
         const subjects = await SubjectUser.getSubjects({userId: req.params.id})

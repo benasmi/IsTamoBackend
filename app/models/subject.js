@@ -11,7 +11,7 @@ Subject.getSubject = async (data) => {
 }
 
 Subject.getSubjects = async (data) => {
-    const [subjects,f] = await dbConn.query("SELECT * FROM SUBJECT", [data.subjectId])
+    const [subjects,f] = await dbConn.query("SELECT * FROM SUBJECT")
     return subjects
 }
 
