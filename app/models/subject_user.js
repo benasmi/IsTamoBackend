@@ -22,7 +22,7 @@ SubjectUser.createSubjectUser = async (data) => {
     const [result,fields] = await dbConn.query("INSERT INTO SUBJECT_USER " +
     "(fk_subjectId, fk_userId) VALUES " +
     "(?,?)", [data.subjectId, data.userId])
-    return await SubjectUser.getSubjectUser({id: result.insertId})
+    return await SubjectUser.findSubjectUser({userId: result.insertId})
 }
 
 SubjectUser.updateSubjectUser = async (data) => {
@@ -30,11 +30,11 @@ SubjectUser.updateSubjectUser = async (data) => {
     "fk_subjectId=COALESCE(?,fk_subjectId), fk_userId=COALESCE(?,fk_userId) " +
     "WHERE id=?", 
     [data.subjectId, data.userId, data.id])
-    return await SubjectUser.getSubjectUser({id: data.id})
+    return await SubjectUser.findSubjectUser({userId: data.id})
 }
 
 SubjectUser.removeSubjectUser = async (data) => {
-    const removed = SubjectUser.getSubjectUser({id: data.id})
+    const removed = SubjectUser.findSubjectUser({userId: data.id})
     await dbConn.query("DELETE FROM SUBJECT_USER " +
     "WHERE id=?", [data.id])
     return removed

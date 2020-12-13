@@ -64,12 +64,12 @@ User.getAllMarks = async (data) => {
 User.create = async (user) => {
     // todo: backend validations
     user.password = crypto.createHash('sha256').update(user.password).digest('hex');
-    await dbConn.query('INSERT INTO USERS ' + 
+    const [result,fields] = await dbConn.query('INSERT INTO USERS ' + 
     '(fk_userId, fk_roleId, name, surname, birthday, email, password, address, id_code) ' +
     'VALUES (?,?,?,?,?,?,?,?,?)', [user.parent, user.roleId, user.name, user.surname, user.birthday, 
         user.email, user.password, user.address, user.id_code])
     delete user.password
-    return user
+    return await User.findOne({id: result.insertId})
 }
 
 User.update = async (user) => {

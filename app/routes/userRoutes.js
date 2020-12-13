@@ -41,6 +41,11 @@ router.get('/:id/', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
     try {
         const inserted = await User.create(req.body)
+        if (req.body.subjects) {
+            req.body.subjects.forEach(async element => {
+                await SubjectUser.createSubjectUser({subjectId: element, userId: inserted.id})
+            })
+        }
         return res.status(200).send(inserted)
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })
@@ -48,8 +53,6 @@ router.post('/', auth, async (req, res) => {
 router.patch('/', auth, async (req, res) => {
     try {
         const user = await User.findOne({id: req.body.id});
-        console.log(user);
-        console.log(req.body);
         if (!user) return res.status(404).send({error: true, message: 'User not found'})
 
         await User.update(req.body)
