@@ -10,7 +10,19 @@ const User = require('../models/user')
 var Reports = function(report) {}
 
 Reports.generateSchoolReport = async (data) => {
-    const students = await User.find({type: "Mokinys"})
+    const [roles,fff] = await dbConn.query("SELECT * FROM ROLE")
+
+    studentRole = roles.find(role => {
+        return role.name === "Mokinys"
+    })
+
+    teacherRole = roles.find(role => {
+        return role.name === "Mokytojas"
+    })
+    const students = studentRole ? await User.find({roleId: studentRole.id}) : null
+    const teachers = teacherRole ? await User.find({roleId: teacherRole.id}) : null
+
+    let report = {}
 
     let average
     let schoolAveragesSum = 0
@@ -29,7 +41,14 @@ Reports.generateSchoolReport = async (data) => {
         }
     }
 
-    console.log(students)
+    const [schoolSubjects,f] = await dbConn.query("SELECT * FROM SUBJECT")
+
+    report.schoolAverage = schoolAveragesSum/notNullCount
+    report.schoolSubjects = schoolSubjects
+    report.teachersData = teachers
+    report.studentsData = students
+
+    return report
 }
 
 module.exports = Reports
