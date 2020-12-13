@@ -59,4 +59,13 @@ Mark.getAverage = async (data) => {
     return marks
 }
 
+Mark.getRatings = async (data) => {
+    const mine = await Mark.getAverage(data)
+    const [averages,fields] = await dbConn.query("SELECT USERS.id, AVG(MARK.mark) average FROM USERS " + 
+    "INNER JOIN MARK ON MARK.fk_userId=USERS.id " + 
+    "GROUP BY USERS.id " +
+    "ORDER BY average DESC")
+    return {mine: mine[0].average, averages}
+}
+
 module.exports = Mark

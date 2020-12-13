@@ -61,4 +61,11 @@ router.get('/average', auth, async (req, res) => {
     } catch (e) {return res.status(500).send({error: true, message: e.message})}
 })
 
+router.get('/rating', auth, async (req, res) => {
+    try {
+        const result = await Mark.getRatings({userId: req.payload.id})
+        return res.status(200).send(result)
+    } catch (e) {return res.status(500).send({error: true, message: e.message})}
+})
+
 module.exports = router
