@@ -20,6 +20,7 @@ const markRoutes = require('./routes/markRoutes')
 const authRoutes = require('./routes/authRoutes')
 const systemRoutes = require('./routes/systemRoutes')
 const scheduleRoutes = require('./routes/scheduleRoutes')
+const subjectRoutes = require('./routes/subjectRoutes')
 
 app.use(genericRoutes)
 app.use('/api/users', userRoutes)
@@ -28,6 +29,7 @@ app.use('/api/marks', markRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/system', systemRoutes)
 app.use('/api/schedule', scheduleRoutes)
+app.use('/api/subject', subjectRoutes)
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`);

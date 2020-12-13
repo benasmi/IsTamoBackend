@@ -11,9 +11,10 @@ SubjectUser.getSubjects = async (data) => {
     return result
 }
 
-SubjectUser.getSubjectUser = async (data) => {
+SubjectUser.findSubjectUser = async (data) => {
     const [result,fields] = await dbConn.query("SELECT * FROM SUBJECT_USER " +
-    "WHERE id=?", [data.id])
+    "WHERE id=COALESCE(?,id) and fk_userId=COALESCE(?,fk_userId) and fk_subjectId=COALESCE(?,fk_subjectId)", 
+    [data.id, data.userId, data.subjectId])
     return result[0]
 }
 
