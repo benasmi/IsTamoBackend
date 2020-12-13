@@ -5,6 +5,7 @@ const auth = require('../middleware/auth.js')
 
 router.get('/me', auth, async (req, res) => {
     try {
+        console.log(req.payload.id);
         const user = await User.findOne({id: req.payload.id})
 
         return res.status(200).send(user)
@@ -37,7 +38,9 @@ router.post('/', auth, async (req, res) => {
 
 router.patch('/', auth, async (req, res) => {
     try {
-        const user = await User.findOne({id: req.body.id})
+        const user = await User.findOne({id: req.body.id});
+        console.log(user);
+        console.log(req.body);
         if (!user) return res.status(404).send({error: true, message: 'User not found'})
 
         await User.update(req.body)
